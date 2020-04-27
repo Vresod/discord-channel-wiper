@@ -21,6 +21,10 @@ async def on_message(message):
 				return
 		if message.content.startswith("$deleteall"):
 				await message.channel.send("Deleting messages...")
+				for i in range(1,3):
+					messageid = message.channel.last_message_id
+					deletemessage = await message.channel.fetch_message(messageid)
+					await deletemessage.delete()
 		if message.content.startswith("$check"):
 			await message.channel.send(message.channel.id)
 
