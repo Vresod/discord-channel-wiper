@@ -1,20 +1,27 @@
 # imports required for running.
 import discord
-# read file
-with open('tokenfile', 'r') as tokenfile:
+# read tokenfile
+with open("tokenfile", "r") as tokenfile:
 		token=tokenfile.read()
 
-print(token) # token is stored in plaintext but that shouldn't be a problem
+print(token) # token is stored in plaintext but that shouldn"t be a problem
 
 if token == "":
 	print("Provide token in tokenfile")
 
-class MyClient(discord.Client):
-		async def on_ready(self):
-				print('Logged on as {0}!'.format(self.user))
+client = discord.Client()
 
-		async def on_message(self, message):
-				print('Message from {0.author}: {0.content}'.format(message))
+@client.event
+async def on_ready():
+		print("logged in as {0.user}".format(client))
 
-client = MyClient()
+@client.event
+async def on_message(message):
+		if message.author == client.user:
+				return
+		if message.content.startswith("$deleteall"):
+				await message.channel.send("Deleting messages...")
+		if message.content.startswith("$check"):
+			await message.channel.send(message.channel.id)
+
 client.run(token)
